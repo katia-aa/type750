@@ -1,0 +1,7 @@
+.custom-editor-content :focus-visible {
+  outline: none;
+}
+
+.ProseMirror-focused {
+  outline: none;
+}

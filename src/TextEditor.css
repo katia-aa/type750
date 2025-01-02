@@ -1,0 +1,27 @@
+
+.editor-content {
+    outline: none; /* Remove border when focused */
+}
+
+.editor-content .ProseMirror {
+    caret-color: transparent; /* Hide default caret */
+    position: relative;
+}
+
+.editor-content .ProseMirror::after {
+    content: '';
+    position: absolute;
+    width: 2px; /* Thick caret */
+    height: 1em;
+    background-color: #000; /* Flashy color */
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
