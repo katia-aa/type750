@@ -47,20 +47,27 @@ const TextEditor: React.FC = () => {
 
       if (entryError) {
         // If no entry exists, create one
-        const { data: newEntry, error: newEntryError } = await supabase
+        const { data: newEntry, error: newEntryError } = (await supabase
           .from("entries")
           .insert([
             { user_id: "123e4567-e89b-12d3-a456-426614174000", content: "" },
           ])
-          .single();
+          .single()) as {
+          data: { id: string; content: string } | null;
+          error: any;
+        };
 
         if (newEntryError) {
           console.error("Error creating new entry:", newEntryError);
           return;
         }
 
-        setEntryId(newEntry.id);
-        editor?.commands.setContent(newEntry.content);
+        if (newEntry) {
+          setEntryId(newEntry.id);
+        }
+        if (newEntry) {
+          editor?.commands.setContent(newEntry.content);
+        }
       } else {
         // If entry exists, load it
         setEntryId(entry.id);
