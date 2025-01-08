@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { supabase } from "./supabaseClient";
@@ -38,11 +38,12 @@ const TextEditor: React.FC = () => {
   // Fetch or create an entry for the user
   useEffect(() => {
     const fetchEntry = async () => {
-      const { data: entry, error: entryError } = await supabase
+      const { data: entries, error: entryError } = await supabase
         .from("entries")
         .select("*")
-        .eq("user_id", "123e4567-e89b-12d3-a456-426614174000")
-        .single();
+        .eq("user_id", "123e4567-e89b-12d3-a456-426614174000");
+
+      const entry = entries?.[0];
 
       if (entryError) {
         // If no entry exists, create one
@@ -78,7 +79,11 @@ const TextEditor: React.FC = () => {
 
     const { error } = await supabase
       .from("entries")
-      .update({ content, updated_at: new Date().toISOString() })
+      .update({
+        content,
+        user_id: "123e4567-e89b-12d3-a456-426614174000",
+        word_count: wordCount,
+      })
       .eq("id", entryId);
 
     if (error) console.error("Error saving entry:", error);
@@ -86,18 +91,31 @@ const TextEditor: React.FC = () => {
     setIsSaving(false);
   };
 
+  // Determine the color based on the word count
+  const getColorClass = () => {
+    if (wordCount >= 750) {
+      return "text-green-500";
+    } else if (wordCount >= 500) {
+      return "text-yellow-500";
+    } else {
+      return "text-red-500";
+    }
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto mt-10 grid grid-rows-2 gap-4 h-full">
       {/* EditorContent API: https://tiptap.dev/docs/editor/api/editor */}
       <EditorContent
         editor={editor}
-        className="prose prose-lg b-none rounded custom-editor-content m-none font-weight-700 w-full"
+        className={`prose prose-lg b-none rounded custom-editor-content m-none font-weight-700 w-full`}
       />
-      <div className="flex justify-between items-center mb-2 mt-2">
+      <div className="flex justify-between items-end mb-2 mt-2">
         <p className="text-sm text-gray-500">
           {isSaving ? "Saving..." : "Saved"}
         </p>
-        <p className="text-sm text-gray-500">Word Count: {wordCount}</p>
+        <p className={`text-sm text-gray-500 ${getColorClass()}`}>
+          Word Count: {wordCount}
+        </p>
       </div>
     </div>
   );
@@ -105,8 +123,6 @@ const TextEditor: React.FC = () => {
 
 // Add CSS class to target ProseMirror-focused class inside EditorContent
 const styles = `
-
-
 .prose {
     max-width: 100%;
 }
