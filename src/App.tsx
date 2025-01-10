@@ -1,13 +1,13 @@
-import React from "react";
-import TextEditor from "./TextEditor";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
-const App: React.FC = () => {
-  return (
-    <div className="p-8">
-      <h1 className="font-bold text-purple-700 text-center my-6">Type 750</h1>
-      <TextEditor />
-    </div>
-  );
-};
+const router = createRouter({
+  routeTree,
+  basepath: "/type750", // Match your `base` in Vite
+});
+
+function App() {
+  return <RouterProvider router={router} />;
+}
 
 export default App;

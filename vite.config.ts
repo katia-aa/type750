@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
 
 export default defineConfig({
   base: "/type750", // Set correct base path
-  plugins: [react()],
+  plugins: [react(), TanStackRouterVite()],
   build: {
     outDir: "dist", // Output directory
     rollupOptions: {
