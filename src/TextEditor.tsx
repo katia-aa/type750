@@ -2,6 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { supabase } from "./supabaseClient";
+import { getColorClass } from "./utils/getColorClass";
+import "./styles/texteditor.css";
+import { startOfDay, endOfDay, formatISO } from "date-fns";
+
+type EntryResponse = {
+  data: { id: string; content: string } | null;
+  error: any;
+};
+
+// Get start and end of the current day in ISO format
+const startOfToday = formatISO(startOfDay(new Date()));
+const endOfToday = formatISO(endOfDay(new Date()));
 
 const TextEditor: React.FC = () => {
   const [entryId, setEntryId] = useState<string | null>(null);
@@ -18,60 +30,56 @@ const TextEditor: React.FC = () => {
     onUpdate: ({ editor }) => {
       const content = editor.getHTML();
       setWordCount(editor.getText().split(" ").filter(Boolean).length);
-
-      // Save the content to Supabase
       autoSave(content);
     },
   });
 
-  useEffect(() => {
-    const styleSheet = document.createElement("style");
-    styleSheet.type = "text/css";
-    styleSheet.innerText = styles;
-    document.head.appendChild(styleSheet);
-
-    return () => {
-      document.head.removeChild(styleSheet);
-    };
-  }, []);
-
   // Fetch or create an entry for the user
   useEffect(() => {
     const fetchEntry = async () => {
-      const { data: entries, error: entryError } = await supabase
-        .from("entries")
-        .select("*")
-        .eq("user_id", "123e4567-e89b-12d3-a456-426614174000");
+      try {
+        // Attempt to Fetch today's entry
+        const { data: todayEntries, error: todayEntryError } = await supabase
+          .from("entries")
+          .select("*")
+          .eq("user_id", "123e4567-e89b-12d3-a456-426614174000")
+          .gte("created_at", startOfToday)
+          .lt("created_at", endOfToday);
 
-      const entry = entries?.[0];
+        const todayEntry = todayEntries?.[0];
 
-      if (entryError) {
-        // If no entry exists, create one
+        // If today's entry exists, then set the id for autosave and set the content
+        if (todayEntry) {
+          setEntryId(todayEntry.id);
+          editor?.commands.setContent(todayEntry.content);
+          return;
+        }
+
+        if (todayEntryError) {
+          console.error("Error fetching today's entry:", todayEntryError);
+        }
+
+        // If no entry exists, create an empty entry
         const { data: newEntry, error: newEntryError } = (await supabase
           .from("entries")
           .insert([
-            { user_id: "123e4567-e89b-12d3-a456-426614174000", content: "" },
+            {
+              user_id: "123e4567-e89b-12d3-a456-426614174000",
+              content: "",
+            },
           ])
-          .single()) as {
-          data: { id: string; content: string } | null;
-          error: any;
-        };
+          .single()) as EntryResponse;
 
         if (newEntryError) {
           console.error("Error creating new entry:", newEntryError);
-          return;
         }
 
         if (newEntry) {
           setEntryId(newEntry.id);
-        }
-        if (newEntry) {
           editor?.commands.setContent(newEntry.content);
         }
-      } else {
-        // If entry exists, load it
-        setEntryId(entry.id);
-        editor?.commands.setContent(entry.content);
+      } catch (error) {
+        console.error("Error fetching or creating entry:", error);
       }
     };
 
@@ -84,13 +92,14 @@ const TextEditor: React.FC = () => {
 
     setIsSaving(true);
 
+    const payload = {
+      content,
+      word_count: wordCount,
+    };
+
     const { error } = await supabase
       .from("entries")
-      .update({
-        content,
-        user_id: "123e4567-e89b-12d3-a456-426614174000",
-        word_count: wordCount,
-      })
+      .update(payload)
       .eq("id", entryId);
 
     if (error) console.error("Error saving entry:", error);
@@ -98,20 +107,8 @@ const TextEditor: React.FC = () => {
     setIsSaving(false);
   };
 
-  // Determine the color based on the word count
-  const getColorClass = () => {
-    if (wordCount >= 750) {
-      return "text-green-500";
-    } else if (wordCount >= 500) {
-      return "text-yellow-500";
-    } else {
-      return "text-red-500";
-    }
-  };
-
   return (
     <div className="w-full max-w-3xl mx-auto mt-10 grid grid-rows-2 gap-4 h-full">
-      {/* EditorContent API: https://tiptap.dev/docs/editor/api/editor */}
       <EditorContent
         editor={editor}
         className={`prose prose-lg b-none rounded custom-editor-content m-none font-weight-700 w-full`}
@@ -120,32 +117,12 @@ const TextEditor: React.FC = () => {
         <p className="text-sm text-gray-500">
           {isSaving ? "Saving..." : "Saved"}
         </p>
-        <p className={`text-sm text-gray-500 ${getColorClass()}`}>
+        <p className={`text-sm text-gray-500 ${getColorClass(wordCount)}`}>
           Word Count: {wordCount}
         </p>
       </div>
     </div>
   );
 };
-
-// Add CSS class to target ProseMirror-focused class inside EditorContent
-const styles = `
-.prose {
-    max-width: 100%;
-}
-.ProseMirror {
-    font-weight: 500;
-    caret-color: #805ad5;
-    caret-shape: block;
-    caret-width: 2px;
-}
-    .ProseMirror::selection {
-    background: transparent;
-    border-left: 5px solid #805ad5; /* Change the width of the caret */
-}
-  .ProseMirror-focused {
-    outline: none;
-  }
-`;
 
 export default TextEditor;

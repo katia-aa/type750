@@ -1,0 +1,13 @@
+.prose {
+  max-width: 100%;
+}
+.ProseMirror {
+  font-weight: 500;
+}
+.ProseMirror::selection {
+  background: transparent;
+  border-left: 5px solid #805ad5; /* Change the width of the caret */
+}
+.ProseMirror-focused {
+  outline: none;
+}
