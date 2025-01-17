@@ -8,6 +8,7 @@ module.exports = {
           DEFAULT: "#8C81BD",
           dark: "#7269A6",
         },
+        pink: 'rgb(255 117 186)', 
       },
       borderRadius: {
         xl: "1rem",

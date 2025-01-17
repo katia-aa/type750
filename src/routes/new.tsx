@@ -7,8 +7,7 @@ export const Route = createFileRoute("/new")({
 
 function RouteComponent() {
   return (
-    <div className="p-8">
-      <h1 className="font-bold text-purple-700 text-center my-6">Type 750</h1>
+    <div className="min-h-screen p-8 h-full flex flex-col">
       <TextEditor />
     </div>
   );

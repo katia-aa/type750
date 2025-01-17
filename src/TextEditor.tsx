@@ -108,12 +108,18 @@ const TextEditor: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto mt-10 grid grid-rows-2 gap-4 h-full">
-      <EditorContent
-        editor={editor}
-        className={`prose prose-lg b-none rounded custom-editor-content m-none font-weight-700 w-full`}
-      />
-      <div className="flex justify-between items-end mb-2 mt-2">
+    <div className="w-full max-w-3xl mx-auto mt-10 h-full flex flex-col">
+      <h1 className="font-bold text-pink mt-0 text-base">Type 750</h1>
+      {/* Editor Content */}
+      <div className="flex-1 overflow-y-auto">
+        <EditorContent
+          editor={editor}
+          className="prose prose-lg b-none rounded custom-editor-content m-none font-weight-700 w-full"
+        />
+      </div>
+    
+      {/* Footer Section */}
+      <div className="flex justify-between items-center font-bold">
         <p className="text-sm text-gray-500">
           {isSaving ? "Saving..." : "Saved"}
         </p>
@@ -121,7 +127,7 @@ const TextEditor: React.FC = () => {
           Word Count: {wordCount}
         </p>
       </div>
-    </div>
+    </div>  
   );
 };
 

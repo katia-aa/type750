@@ -18,10 +18,13 @@
 }
 
 html, body, #root {
-  height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+#root {
+  background-color: rgb(250, 250, 250);
 }
 
 a {
@@ -50,7 +53,7 @@ button {
   border-radius: 50px; /* or use rounded-full in Tailwind */
   padding: 0.8em 1.5em;
   font-size: 1em;
-  background-color: #9333ea;
+  background-color: rgb(255 117 186);
   color: white;
   cursor: pointer;
   transition: all 0.25s ease-in-out;
@@ -58,7 +61,7 @@ button {
 }
 
 button:hover {
-  background-color: #7e22ce;
+  background-color: #f857a5;
   transform: translateY(-2px); /* Slight hover effect */
 }
 
@@ -73,7 +76,7 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #f857a5;
   }
   button {
     background-color: #f9f9f9;

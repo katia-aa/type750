@@ -5,6 +5,6 @@ export const getColorClass = (wordCount: number) => {
   } else if (wordCount >= 500) {
     return "text-yellow-500";
   } else {
-    return "text-red-500";
+    return "text-pink";
   }
 };

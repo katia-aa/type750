@@ -7,9 +7,9 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <header className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-purple-700">
+        <h1 className="text-4xl font-bold text-pink">
           Welcome to Type 750
         </h1>
         <p className="text-lg text-gray-700 mt-4">
@@ -20,7 +20,7 @@ function RouteComponent() {
       <main className="flex flex-col items-center">
         <Link
           to="/new"
-          className="bg-purple-700 text-white px-6 py-3 rounded-full text-lg mb-4"
+          className="bg-pink text-white px-6 py-3 rounded-full text-lg mb-4"
         >
           Start Writing
         </Link>
