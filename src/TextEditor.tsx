@@ -52,6 +52,8 @@ const TextEditor: React.FC = () => {
         if (todayEntry) {
           setEntryId(todayEntry.id);
           editor?.commands.setContent(todayEntry.content);
+          const text = editor?.getText() || "";
+          setWordCount(text.split(" ").filter(Boolean).length);
           return;
         }
 
