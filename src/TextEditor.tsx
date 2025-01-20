@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { supabase } from "./supabaseClient";
+import { supabase } from "../supabaseClient";
 import { getColorClass } from "./utils/getColorClass";
 import "./styles/texteditor.css";
 import { startOfDay, endOfDay, formatISO } from "date-fns";
@@ -117,7 +117,7 @@ const TextEditor: React.FC = () => {
           className="prose prose-lg b-none rounded custom-editor-content m-none font-weight-700 w-full"
         />
       </div>
-    
+
       {/* Footer Section */}
       <div className="flex justify-between items-center font-bold">
         <p className="text-sm text-gray-500">
@@ -127,7 +127,7 @@ const TextEditor: React.FC = () => {
           Word Count: {wordCount}
         </p>
       </div>
-    </div>  
+    </div>
   );
 };
 
