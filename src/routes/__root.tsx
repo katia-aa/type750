@@ -12,3 +12,5 @@ function RootComponent() {
     </React.Fragment>
   );
 }
+
+export const rootRoute = Route;

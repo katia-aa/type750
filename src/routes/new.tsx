@@ -1,14 +1,22 @@
-import { createFileRoute } from "@tanstack/react-router";
+import React from "react";
+import { createFileRoute, createRoute } from "@tanstack/react-router";
 import TextEditor from "../TextEditor";
+import { useAuth } from "../AuthProvider";
 
-export const Route = createFileRoute("/new")({
-  component: RouteComponent,
-});
+const NEW = () => {
+  const { isAuthenticated } = useAuth();
 
-function RouteComponent() {
+  if (!isAuthenticated) {
+    return <div>You need to be authenticated to view this page.</div>;
+  }
+
   return (
     <div className="min-h-screen p-8 h-full flex flex-col">
       <TextEditor />
     </div>
   );
-}
+};
+
+export const Route = createFileRoute("/new")({
+  component: NEW,
+});
