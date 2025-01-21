@@ -13,8 +13,7 @@ function RouteComponent() {
           Welcome to Type 750
         </h1>
         <p className="text-lg text-gray-700 mt-4">
-          Your daily writing companion. Write 750 words every day and track your
-          progress.
+          Your daily mental relief. Write 750 words every day to clear your mind and find peace.
         </p>
       </header>
       <main className="flex flex-col items-center">
@@ -22,7 +21,7 @@ function RouteComponent() {
           to="/new"
           className="bg-pink text-white px-6 py-3 rounded-full text-lg mb-4"
         >
-          Start Writing
+          Start Your Mental Detox
         </Link>
         {/* <Link
           to="/progress"

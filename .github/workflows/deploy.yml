@@ -3,16 +3,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Replace 'main' with your branch name if different
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
-    permissions: # Add this block to ensure correct permissions
-      contents: write
-      pages: write
-      id-token: write
 
     steps:
       - name: Checkout Code
@@ -27,11 +22,10 @@ jobs:
         run: npm install
 
       - name: Build Project
-        run: npm run build # Adjust this to match your build script
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # Replace './dist' with your build output folder
-          force_orphan: true # Force fresh deployment
+          publish_dir: ./dist

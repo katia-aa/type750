@@ -115,7 +115,9 @@ const TextEditor: React.FC = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-10 h-full flex flex-col">
-      <h1 className="font-bold text-pink mt-0 text-base">Type 750</h1>
+      <h1 className="font-bold text-pink mt-0 text-base">
+        Type 750: Your Mental Space
+      </h1>
       {/* Editor Content */}
       <div className="flex-1 overflow-y-auto">
         <EditorContent
@@ -125,12 +127,12 @@ const TextEditor: React.FC = () => {
       </div>
 
       {/* Footer Section */}
-      <div className="flex justify-between items-center font-bold">
+      <div className="flex justify-between items-center font-bold mt-auto">
         <p className={`text-sm text-gray-500 ${getColorClass(wordCount)}`}>
           Word Count: {wordCount}
         </p>
         <p className="text-sm text-gray-500">
-          {isSaving ? "Saving..." : "Saved"}
+          {isSaving ? "Saving your thoughts..." : "Thoughts saved"}
         </p>
       </div>
     </div>

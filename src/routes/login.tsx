@@ -29,6 +29,7 @@ function RouteComponent() {
   return (
     <div>
       <h2>Login</h2>
+      <p>Log in to continue your journey of mental clarity.</p>
       <form onSubmit={handleLogin}>
         <div>
           <label>Email</label>
