@@ -5,6 +5,7 @@ import { supabase } from "../supabaseClient";
 import { getColorClass } from "./utils/getColorClass";
 import "./styles/texteditor.css";
 import { startOfDay, endOfDay, formatISO } from "date-fns";
+import { useAuth } from "./AuthProvider";
 
 type EntryResponse = {
   data: { id: string; content: string } | null;
@@ -16,6 +17,7 @@ const startOfToday = formatISO(startOfDay(new Date()));
 const endOfToday = formatISO(endOfDay(new Date()));
 
 const TextEditor: React.FC = () => {
+  const { session } = useAuth();
   const [entryId, setEntryId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [wordCount, setWordCount] = useState(0);
@@ -37,12 +39,14 @@ const TextEditor: React.FC = () => {
   // Fetch or create an entry for the user
   useEffect(() => {
     const fetchEntry = async () => {
+      if (!session?.user) return;
+
       try {
         // Attempt to Fetch today's entry
         const { data: todayEntries, error: todayEntryError } = await supabase
           .from("entries")
           .select("*")
-          .eq("user_id", "123e4567-e89b-12d3-a456-426614174000")
+          .eq("user_id", session.user.id)
           .gte("created_at", startOfToday)
           .lt("created_at", endOfToday);
 
@@ -66,7 +70,7 @@ const TextEditor: React.FC = () => {
           .from("entries")
           .insert([
             {
-              user_id: "123e4567-e89b-12d3-a456-426614174000",
+              user_id: session.user.id,
               content: "",
             },
           ])
@@ -86,7 +90,7 @@ const TextEditor: React.FC = () => {
     };
 
     fetchEntry();
-  }, [editor]);
+  }, [editor, session]);
 
   // Autosave functionality
   const autoSave = async (content: string) => {
@@ -122,11 +126,11 @@ const TextEditor: React.FC = () => {
 
       {/* Footer Section */}
       <div className="flex justify-between items-center font-bold">
-        <p className="text-sm text-gray-500">
-          {isSaving ? "Saving..." : "Saved"}
-        </p>
         <p className={`text-sm text-gray-500 ${getColorClass(wordCount)}`}>
           Word Count: {wordCount}
+        </p>
+        <p className="text-sm text-gray-500">
+          {isSaving ? "Saving..." : "Saved"}
         </p>
       </div>
     </div>
