@@ -10,12 +10,12 @@ export const Route = createFileRoute("/signup")({
 function RouteComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | string>(null);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     const { error } = await supabase.auth.signUp({ email, password });
-    if (error) setError(error.message);
+    if (error) setError(error.message as string);
     else alert("Signup successful!");
   };
 
@@ -25,8 +25,11 @@ function RouteComponent() {
       <p>Join us and start your daily mental detox.</p>
       <form onSubmit={handleSignup}>
         <div>
-          <label>Email</label>
+          <label htmlFor="email" className="block mb-2">
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -34,8 +37,11 @@ function RouteComponent() {
           />
         </div>
         <div>
-          <label>Password</label>
+          <label htmlFor="password" className="block mb-2">
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

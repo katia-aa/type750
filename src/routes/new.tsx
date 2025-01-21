@@ -1,5 +1,4 @@
-import React from "react";
-import { createFileRoute, createRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import TextEditor from "../TextEditor";
 import { useAuth } from "../AuthProvider";
 

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "ESNext",
-    "lib": ["ESNext", "DOM", "deno.ns", "deno.unstable"],
+    "lib": ["esnext", "dom"],
     "strict": true
   }
 }

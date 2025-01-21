@@ -25,15 +25,17 @@ function RouteComponent() {
       // Redirect to a different page or show a success message
     }
   };
-
   return (
-    <div>
-      <h2>Login</h2>
-      <p>Log in to continue your journey of mental clarity.</p>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Email</label>
+    <div className="container">
+      <h2 className="text-2xl font-bold mb-4">Login</h2>
+      <p className="mb-6">Log in to continue your journey of mental clarity.</p>
+      <form onSubmit={handleLogin} className="max-w-sm">
+        <div className="mb-4">
+          <label htmlFor="email" className="block mb-2">
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -41,8 +43,11 @@ function RouteComponent() {
           />
         </div>
         <div>
-          <label>Password</label>
+          <label htmlFor="password" className="block mb-2">
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
